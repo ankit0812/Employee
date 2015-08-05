@@ -7,9 +7,12 @@
 //
 
 #import "SearchViewController.h"
-
+#import <CoreData/CoreData.h>
+#import "DetailViewController.h"
 @interface SearchViewController ()
-
+{
+    NSArray *matchData;
+}
 @end
 
 @implementation SearchViewController
@@ -35,6 +38,97 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+-(UIImage *)loadImage: (NSString *)name
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,
+                                                         NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString* path = [documentsDirectory stringByAppendingPathComponent:
+                      [NSString stringWithString:name] ];
+    UIImage* image = [UIImage imageWithContentsOfFile:path];
+    return image;
+}
+
+- (IBAction)search:(id)sender {
+    NSManagedObjectContext *context = [self managedObjectContext];
+    NSEntityDescription *desc=[NSEntityDescription entityForName:@"Employee" inManagedObjectContext:context];
+    NSFetchRequest *fetch=[[NSFetchRequest alloc]init];
+    
+    [fetch setEntity:desc];
+    if(![_empIDText.text isEqual:@""]){
+        NSPredicate *pred=[NSPredicate predicateWithFormat:@"empId like %@",_empIDText.text];
+        [fetch setPredicate:pred];
+        NSError *error;
+        matchData=[context executeFetchRequest:fetch error:&error];
+        
+        if(matchData.count<=0){
+            
+            UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Message"
+                                                              message:@"Record Not Found"
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles:nil];
+            
+            [message show];
+            
+        } else{
+            [self performSegueWithIdentifier:@"do" sender:self];
+            
+        }
+    }   //This will take search key as Name And Designation
+    else if ((![_firstNameText.text isEqual:@""]) && ([_designationText.text isEqual:@""])){
+        NSPredicate *pred=[NSPredicate predicateWithFormat:@"firstName like %@ and designation like %@",
+                           _firstNameText.text,_designationText.text];
+        [fetch setPredicate:pred];
+        NSError *error;
+        matchData=[context executeFetchRequest:fetch error:&error];
+        
+        if(matchData.count<=0){
+            
+            UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Message"
+                                                              message:@"Record Not Found"
+                                                             delegate:nil
+                                                    cancelButtonTitle:@"OK"
+                                                    otherButtonTitles:nil];
+            
+            [message show];
+
+            } else{
+            [self performSegueWithIdentifier:@"do" sender:self];
+                
+           
+            }
+    
+    }
+    else{
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Message"
+                                                          message:@"Invalid Combination"
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        
+        [message show];
+
+        }
+    
+}
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if([segue.identifier isEqualToString:@"do"]){
+        
+        DetailViewController *dest=segue.destinationViewController;
+        for(NSManagedObject *obj in matchData){
+            dest.emp=obj;
+        }
+        
+    }
+}
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{               //This will dismiss keyboard when user touches any where in the view
+    [self.view endEditing:YES];
+}
+
 
 /*
 #pragma mark - Navigation

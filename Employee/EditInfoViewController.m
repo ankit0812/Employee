@@ -65,15 +65,14 @@
 
 
 
-- (IBAction)browsePic:(id)sender {
+- (IBAction)browsePic:(id)sender
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     
-    [self.view endEditing:YES];
-    //To select the image from gallery. This wil open up the gallery.
-    UIImagePickerController *photoPicker = [[UIImagePickerController alloc] init];
-    photoPicker.delegate = self;
-    photoPicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    
-    [self presentViewController:photoPicker animated:YES completion:NULL];
+    [self presentViewController:picker animated:YES completion:NULL];
     
 }
 
@@ -139,13 +138,23 @@
     }
 }
 
-- (void)imagePickerController:(UIImagePickerController *)photoPicker didFinishPickingMediaWithInfo:(NSDictionary *)info{
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
     
-    UIImage *selectedImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+    self.imageView.image = chosenImage;
     
-    [self.imageView setImage:selectedImage];
+    [picker dismissViewControllerAnimated:YES completion:NULL];
     
-    [photoPicker dismissModalViewControllerAnimated:YES];
+}
+
+// Cancel choosing images
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
 }
 
 - (void)saveImage: (UIImageView *)imageView imgName:(NSString *)name{

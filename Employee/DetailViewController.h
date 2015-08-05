@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-@interface DetailViewController : UIViewController
+@interface DetailViewController : UIViewController<UITextFieldDelegate>
+
 
 @property (weak, nonatomic) IBOutlet UITextField *empID;
 
@@ -28,6 +29,8 @@
 
 @property (strong) NSManagedObject *emp;
 @property (weak, nonatomic) NSString *picLabel;
+
+
 
 
 

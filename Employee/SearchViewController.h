@@ -11,6 +11,8 @@
 @interface SearchViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UITextField *empIDText;
 @property (weak, nonatomic) IBOutlet UITextField *firstNameText;
-@property (weak, nonatomic) IBOutlet UITextField *lastNameText;
+@property (weak, nonatomic) IBOutlet UITextField *designationText;
+
+- (IBAction)search:(id)sender;
 
 @end

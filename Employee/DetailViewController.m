@@ -22,20 +22,30 @@
     [super viewDidLoad];
     
     [_scroller1 setScrollEnabled:YES];
+    
+    self.empID.delegate=self;
+    self.firstName.delegate=self;
+    self.lastName.delegate=self;
+    self.age.delegate=self;
+    self.department.delegate=self;
+    self.designation.delegate=self;
+    self.tagLine.delegate=self;
+  
 
     // Do any additional setup after loading the view.
     //Updating the values of Label with the obtained value from segue in emp
     
-    _empID.text=[self.emp valueForKey:@"empId"];
-    _firstName.text=[self.emp valueForKey:@"firstName"];
-    _lastName.text=[self.emp valueForKey:@"lastName"];
-    _age.text=[self.emp valueForKey:@"age"];
-    _department.text=[self.emp valueForKey:@"department"];
-    _designation.text=[self.emp valueForKey:@"designation"];
-    _tagLine.text=[self.emp valueForKey:@"tagLine"];
+    _empID.text=[@"EMP ID : " stringByAppendingString:[self.emp valueForKey:@"empId"]];
+    _firstName.text=[@"FIRST NAME : " stringByAppendingString:[self.emp valueForKey:@"firstName"]];
+    _lastName.text=[@"LAST NAME : " stringByAppendingString:[self.emp valueForKey:@"lastName"]];
+    _age.text=[@"AGE : " stringByAppendingString:[self.emp valueForKey:@"age"]];
+    _department.text=[@"DEPARTMENT : " stringByAppendingString:[self.emp valueForKey:@"department"]];
+    _designation.text=[@"DESIGNATION : " stringByAppendingString:[self.emp valueForKey:@"designation"]];
+    _tagLine.text=[@"TAG LINE : " stringByAppendingString:[self.emp valueForKey:@"tagLine"]];
     
     _picLabel=[self.emp valueForKey:@"image"];
     _imageView.image=[self loadImage:_picLabel];
+    
     
  
 }
@@ -68,6 +78,10 @@
                       [NSString stringWithString:name] ];
     UIImage* image = [UIImage imageWithContentsOfFile:path];
     return image;
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    return NO;
 }
 
 
