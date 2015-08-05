@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EditInfoViewController : UIViewController <UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate>
+@interface EditInfoViewController : UIViewController <UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate , UIPopoverControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *empID;
 
@@ -23,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *tagLine;
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
-
+@property (strong,nonatomic) UIPopoverController *popOverController;
 
 - (IBAction)takePic:(id)sender;
 
