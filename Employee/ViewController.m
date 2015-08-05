@@ -17,6 +17,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    
+    UITapGestureRecognizer *yourTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollTap:)];
+    [self.scrolls addGestureRecognizer:yourTap];
+    [self.view addSubview:_scrolls];
+    [self.scrolls setScrollEnabled:YES];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -41,4 +47,9 @@
 
 }
 
+- (void)scrollTap:(UIGestureRecognizer*)gestureRecognizer {
+    
+    //make keyboard disappear , you can use resignFirstResponder too, it's depend.
+    [self.view endEditing:YES];
+}
 @end

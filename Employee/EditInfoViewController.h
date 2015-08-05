@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EditInfoViewController : UIViewController <UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+@interface EditInfoViewController : UIViewController <UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *empID;
 
@@ -34,8 +34,8 @@
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scroller;
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField;
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+//-(BOOL)textFieldShouldReturn:(UITextField *)textField;
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 
 
 @end

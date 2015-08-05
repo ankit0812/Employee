@@ -14,6 +14,7 @@
 - (IBAction)browseRecords:(id)sender;
 - (IBAction)searchRecords:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UIScrollView *scrolls;
 
 @end
 

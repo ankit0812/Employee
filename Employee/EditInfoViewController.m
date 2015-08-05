@@ -12,17 +12,27 @@
 
 @interface EditInfoViewController ()
 
+
 @end
 
 @implementation EditInfoViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UITapGestureRecognizer *yourTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollTap:)];
+    [self.scroller addGestureRecognizer:yourTap];
+    [self.view addSubview:_scroller];
+    [self.scroller setScrollEnabled:YES];
+
+    
+    
+   
     // Do any additional setup after loading the view.
     
     NSLog(@"app dir: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
     
-   [_scroller setScrollEnabled:YES];
+   
 }
 
 - (void)didReceiveMemoryWarning {
@@ -182,7 +192,7 @@
         
     }
 }
-
+/*
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {               //This will dismiss keyboard when user touches any where in the view
     [self.scroller endEditing:YES];
@@ -192,5 +202,10 @@
     [textField resignFirstResponder];
     return YES;
 }
-
+*/
+- (void)scrollTap:(UIGestureRecognizer*)gestureRecognizer {
+    
+    //make keyboard disappear , you can use resignFirstResponder too, it's depend.
+    [self.view endEditing:YES];
+}
 @end
