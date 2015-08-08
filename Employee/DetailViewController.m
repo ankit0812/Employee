@@ -30,7 +30,15 @@
     self.department.delegate=self;
     self.designation.delegate=self;
     self.tagLine.delegate=self;
-  
+    
+    _scroller1.delegate=self;
+    [_scroller1 setShowsHorizontalScrollIndicator:NO];
+    
+    UITapGestureRecognizer *yourTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollTap:)];
+    [self.scroller1 addGestureRecognizer:yourTap];
+    [self.view addSubview:_scroller1];
+    [self.scroller1 setScrollEnabled:YES];
+
 
     // Do any additional setup after loading the view.
     //Updating the values of Label with the obtained value from segue in emp
@@ -49,6 +57,9 @@
     
  
 }
+
+float oldX;
+
 
 
 
@@ -80,10 +91,29 @@
     return image;
 }
 
+- (void)scrollTap:(UIGestureRecognizer*)gestureRecognizer{
+    
+    [self.view endEditing:YES];
+}
+
+// Dismiss keyboard on return
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    
+    [textField resignFirstResponder];
+    return YES;
+    
+}
+
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
     return NO;
 }
 
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.contentOffset.x > 0  ||  scrollView.contentOffset.x < 0 )
+        scrollView.contentOffset = CGPointMake(0, scrollView.contentOffset.y);
+}
 
 /*
 #pragma mark - Navigation
@@ -94,5 +124,8 @@
     // Pass the selected object to the new view controller.
 }
 */
+
+
+
 
 @end

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 
-@interface DetailViewController : UIViewController<UITextFieldDelegate>
+@interface DetailViewController : UIViewController<UITextFieldDelegate,UIScrollViewDelegate >
 
 
 @property (weak, nonatomic) IBOutlet UITextField *empID;

@@ -12,7 +12,6 @@
 
 @interface EditInfoViewController ()
 
-
 @end
 
 @implementation EditInfoViewController
@@ -20,20 +19,46 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.empID.delegate = self;
+    self.firstName.delegate = self;
+    self.lastName.delegate = self;
+    self.age.delegate = self;
+    self.designation.delegate = self;
+    self.department.delegate = self;
+    self.tagLine.delegate = self;
+    
+    
+    _scroller.delegate=self;
+    [_scroller setShowsHorizontalScrollIndicator:NO];
+    
     UITapGestureRecognizer *yourTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollTap:)];
     [self.scroller addGestureRecognizer:yourTap];
     [self.view addSubview:_scroller];
     [self.scroller setScrollEnabled:YES];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWasShown:)
+                                                 name:UIKeyboardDidShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
 
     
     
    
     // Do any additional setup after loading the view.
     
+    
+    //Log Directory Path
     NSLog(@"app dir: %@",[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject]);
     
    
 }
+
+float oldX; // here or better in .h interface
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -195,20 +220,89 @@
         
     }
 }
-/*
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{               //This will dismiss keyboard when user touches any where in the view
-    [self.scroller endEditing:YES];
-}
-
--(BOOL)textFieldShouldReturn:(UITextField *)textField{
-    [textField resignFirstResponder];
-    return YES;
-}
-*/
-- (void)scrollTap:(UIGestureRecognizer*)gestureRecognizer {
+- (void)scrollTap:(UIGestureRecognizer*)gestureRecognizer{
     
-    //make keyboard disappear , you can use resignFirstResponder too, it's depend.
     [self.view endEditing:YES];
 }
+
+// Dismiss keyboard on return
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField{
+    
+    [textField resignFirstResponder];
+    return YES;
+    
+}
+
+#pragma - Deals with adjusting the keyboard with the screen show that if a text box is selected keyboard moves down
+
+- (void)keyboardWasShown:(NSNotification *)notification
+{
+    
+    // Step 1: Get the size of the keyboard.
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    
+    // Step 2: Adjust the bottom content inset of your scroll view by the keyboard height.
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
+    _scroller.contentInset = contentInsets;
+    _scroller.scrollIndicatorInsets = contentInsets;
+    
+    
+    
+    
+    // Step 3: Scroll the target text field into view.
+    CGRect aRect = self.view.frame;
+    aRect.size.height -= keyboardSize.height;
+    CGPoint scrollPoint;
+    
+    if (!CGRectContainsPoint(aRect, _lastName.frame.origin))
+    {
+        
+        scrollPoint = CGPointMake(0.0, _lastName.frame.origin.y - (keyboardSize.height));
+    }
+    else if ( !CGRectContainsPoint(aRect, _age.frame.origin))
+    {
+        
+        scrollPoint = CGPointMake(0.0, _age.frame.origin.y - (keyboardSize.height));
+    }
+    else if (  !CGRectContainsPoint(aRect, _department.frame.origin))
+    {
+        
+        scrollPoint = CGPointMake(0.0, _department.frame.origin.y - (keyboardSize.height));
+    }
+    else if (!CGRectContainsPoint(aRect, _designation.frame.origin))
+    {
+        
+        scrollPoint = CGPointMake(0.0, _designation.frame.origin.y - (keyboardSize.height));
+    }
+    else if (!CGRectContainsPoint(aRect, _tagLine.frame.origin))
+    {
+        
+        scrollPoint = CGPointMake(0.0, _tagLine.frame.origin.y - (keyboardSize.height));
+    }
+    
+    
+    [_scroller setContentOffset:scrollPoint animated:YES];
+    
+    //_scroller.contentOffset = CGPointMake(0, [_scroller convertPoint:CGPointZero fromView:textField].y - 60);
+    
+    
+}
+
+
+- (void) keyboardWillHide:(NSNotification *)notification {
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsZero;
+    _scroller.contentInset = contentInsets;
+    _scroller.scrollIndicatorInsets = contentInsets;
+}
+
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.contentOffset.x > 0  ||  scrollView.contentOffset.x < 0 )
+        scrollView.contentOffset = CGPointMake(0, scrollView.contentOffset.y);
+}
+
 @end

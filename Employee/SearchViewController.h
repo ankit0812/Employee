@@ -8,10 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SearchViewController : UIViewController
+@interface SearchViewController : UIViewController <UITextFieldDelegate,UIScrollViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UITextField *empIDText;
 @property (weak, nonatomic) IBOutlet UITextField *firstNameText;
 @property (weak, nonatomic) IBOutlet UITextField *designationText;
+
+
+@property (weak, nonatomic) IBOutlet UIScrollView *scroller;
+
 
 - (IBAction)search:(id)sender;
 

@@ -23,7 +23,17 @@
     [self.scrolls addGestureRecognizer:yourTap];
     [self.view addSubview:_scrolls];
     [self.scrolls setScrollEnabled:YES];
+    
+    _scrolls.delegate=self;
+    [_scrolls setShowsHorizontalScrollIndicator:NO];
+    
+    
+    
+    
+    
 }
+
+float oldX; // here or better in .h interface
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -47,9 +57,16 @@
 
 }
 
+
 - (void)scrollTap:(UIGestureRecognizer*)gestureRecognizer {
     
     //make keyboard disappear , you can use resignFirstResponder too, it's depend.
     [self.view endEditing:YES];
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (scrollView.contentOffset.x > 0  ||  scrollView.contentOffset.x < 0 )
+        scrollView.contentOffset = CGPointMake(0, scrollView.contentOffset.y);
 }
 @end
